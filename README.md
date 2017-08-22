@@ -1,7 +1,10 @@
 # Security Overview
 
-This project provides the following capabilities for a GemFire cluster.
-*  Security Manager - clients must present credentials to connect to a cluster
+This project provides the following capabilities for a GemFire/Apache Geode cluster.
+See [http://geode.apache.org/](http://geode.apache.org/) for more information on Apache Geode.
+
+
+*  Security Manager - clients must present credentials to connect to a Geode cluster
 
 
 Users, their encrypted passwords and their privileges are stored within the GemFire
@@ -19,7 +22,7 @@ Install the GPG at the following URL
 
 **Building the Java Artifacts**
 
-You will need a working maven installation to build the java artifacts.  Directions
+You will need a maven installation to build the java artifacts.  Directions
 are available on the [maven website](http://maven.apache.org/download.cgi). After that, 
 follow these instructions to build all of the java artifacts.
 
@@ -28,7 +31,7 @@ follow these instructions to build all of the java artifacts.
 
 The encryption and decryption of user password is based on a encryption key.
 
-You must set the SECURITY_ENCRYPTION_KEY environment variable on add it as a JVM argument to each started member.
+You must set the SECURITY_ENCRYPTION_KEY environment variable or as a JVM system property on each started Geode member (locators and cache server).
    
 	export SECURITY_ENCRYPTION_KEY=<MY.ENCRYPTION.KEY.HERE>
 	
@@ -46,9 +49,6 @@ The following is an example gfsh command to start the locator
 	
 	
 	start server --name=server2 --locators=localhost[10334] --server-port=10202 --J="-Dgemfire.security-user=admin" --J="-Dgemfire.security-password=admin" --user=admin  --password="{cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102" --J="-Dgemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL"  --J=-Dgemfire.security-manager=io.pivotal.gemfire.security.UserSecurityManager  --classpath=/Projects/Pivotal/dataEng/dev/gemfire-security-extensions/target/gemfire-extensions-security-0.0.1-SNAPSHOT.jar:/Projects/Pivotal/dataEng/dev/gemfire-security-extensions/lib/nyla.solutions.core-1.0.0.jar
-	
-
-
 
 # User Security Manager
 
@@ -90,7 +90,3 @@ Use the following to encrypt a password. NOTE: SECURITY_ENCRYPTION_KEY variable 
 	java -classpath /Projects/Pivotal/dataEng/dev/gemfire-security-extensions/target/gemfire-extensions-security-0.0.1-SNAPSHOT.jar:/Projects/Pivotal/dataEng/dev/gemfire-security-extensions/lib/nyla.solutions.core-1.0.0.jar io.pivotal.gemfire.security.SecurityCryption <PASSWORD>
 	
 	
-	
-
-
-
