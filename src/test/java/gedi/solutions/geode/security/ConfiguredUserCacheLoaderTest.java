@@ -1,4 +1,4 @@
-package io.pivotal.gemfire.security;
+package gedi.solutions.geode.security;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Properties;
 import org.junit.Test;
+
+import gedi.solutions.geode.security.ConfiguredUserCacheLoader;
+import gedi.solutions.geode.security.SecurityCryption;
+import gedi.solutions.geode.security.User;
 import nyla.solutions.core.util.Cryption;
 
 

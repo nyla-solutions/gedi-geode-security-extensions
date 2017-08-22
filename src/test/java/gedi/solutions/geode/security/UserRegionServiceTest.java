@@ -1,10 +1,15 @@
-package io.pivotal.gemfire.security;
+package gedi.solutions.geode.security;
 
 import static org.junit.Assert.*;
 
 import org.apache.geode.cache.Region;
 import org.junit.Before;
 import org.junit.Test;
+
+import gedi.solutions.geode.security.User;
+import gedi.solutions.geode.security.UserRegionService;
+import gedi.solutions.geode.security.UserService;
+
 import static org.mockito.Mockito.*;
 
 public class UserRegionServiceTest 

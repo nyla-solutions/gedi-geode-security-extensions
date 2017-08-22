@@ -1,4 +1,4 @@
-package io.pivotal.gemfire.security;
+package gedi.solutions.geode.security;
 
 public interface UserService
 {

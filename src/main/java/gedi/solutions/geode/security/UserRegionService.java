@@ -1,4 +1,4 @@
-package io.pivotal.gemfire.security;
+package gedi.solutions.geode.security;
 
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Region;

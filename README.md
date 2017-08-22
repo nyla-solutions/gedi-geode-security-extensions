@@ -87,6 +87,6 @@ The User privilege are based on the GemFire ResourePermission (Resource:Operatio
 
 Use the following sample command to encrypt a password. NOTE: SECURITY_ENCRYPTION_KEY variable must match the value set on the server.
 
-	java -classpath target/gemfire-extensions-security-0.0.1-SNAPSHOT.jar:lib/nyla.solutions.core-1.0.0.jar io.pivotal.gemfire.security.SecurityCryption <PASSWORD>
+	java -classpath target/gedi-geode-security-extensions-0.0.1-SNAPSHOT.jar:lib/nyla.solutions.core-1.0.0.jar io.pivotal.gemfire.security.SecurityCryption <PASSWORD>
 	
 	

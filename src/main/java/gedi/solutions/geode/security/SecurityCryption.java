@@ -1,4 +1,4 @@
-package io.pivotal.gemfire.security;
+package gedi.solutions.geode.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
