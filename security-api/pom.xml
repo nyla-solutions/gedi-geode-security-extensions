@@ -9,6 +9,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>	
 	  	<gemfire.version>9.0.2</gemfire.version>	
+        <maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
 	</properties>
   <repositories>
 		<repository>
@@ -123,7 +124,6 @@
 					<reportOutputDirectory>${project.reporting.outputDirectory}/javadoc</reportOutputDirectory>
 					<version>2.8</version>
 				</configuration>
-
 			</plugin>
 <!-- 			<plugin> -->
 <!-- 				<groupId>org.codehaus.mojo</groupId> -->
