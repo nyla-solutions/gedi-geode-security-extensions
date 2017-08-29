@@ -7,8 +7,6 @@ See [http://geode.apache.org/](http://geode.apache.org/) for more information on
 *  Security Manager - clients must present credentials to connect to a Geode cluster
 
 
-Users, their encrypted passwords and their privileges are stored within the GemFire
-cluster in a region called "users".
 
 # Building Notes
 
@@ -89,5 +87,17 @@ The User privilege are based on the GemFire ResourePermission (Resource:Operatio
 Use the following sample command to encrypt a password. NOTE: SECURITY_ENCRYPTION_KEY variable must match the value set on the server.
 
 	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.1.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar io.pivotal.gedi.geode.security.SecurityCryption <PASSWORD>
+	
+	
+
+#GemFire Client Connections
+
+GemFire clients will provide an implementation of org.apache.geode.security.AuthInitialize.
+The security-username and security-password must initialized as gemfire properties.
+
+See the following link for details:
+
+[https://gemfire.docs.pivotal.io/geode/managing/security/implementing_authentication.html](https://gemfire.docs.pivotal.io/geode/managing/security/implementing_authentication.html)
+
 	
 	
