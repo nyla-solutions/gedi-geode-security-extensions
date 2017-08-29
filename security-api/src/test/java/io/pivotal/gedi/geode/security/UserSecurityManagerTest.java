@@ -1,4 +1,4 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 import static org.junit.Assert.*;
 
@@ -15,12 +15,12 @@ import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
 import org.junit.Test;
 
-import gedi.solutions.geode.security.ConfiguredUserCacheLoader;
-import gedi.solutions.geode.security.SecurityCryption;
-import gedi.solutions.geode.security.User;
-import gedi.solutions.geode.security.UserRegionService;
-import gedi.solutions.geode.security.UserSecurityManager;
-import gedi.solutions.geode.security.UserService;
+import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
+import io.pivotal.gedi.geode.security.SecurityCryption;
+import io.pivotal.gedi.geode.security.User;
+import io.pivotal.gedi.geode.security.UserRegionService;
+import io.pivotal.gedi.geode.security.UserSecurityManager;
+import io.pivotal.gedi.geode.security.UserService;
 import nyla.solutions.core.util.Cryption;
 
 import static org.mockito.Mockito.*;

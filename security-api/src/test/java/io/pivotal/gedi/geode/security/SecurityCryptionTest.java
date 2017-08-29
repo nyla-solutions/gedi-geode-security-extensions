@@ -1,10 +1,10 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import gedi.solutions.geode.security.SecurityCryption;
+import io.pivotal.gedi.geode.security.SecurityCryption;
 import nyla.solutions.core.exception.SetupException;
 import nyla.solutions.core.util.Cryption;
 

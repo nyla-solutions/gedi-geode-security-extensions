@@ -1,4 +1,4 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 import static org.junit.Assert.*;
 
@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.Properties;
 import org.junit.Test;
 
-import gedi.solutions.geode.security.ConfiguredUserCacheLoader;
-import gedi.solutions.geode.security.SecurityCryption;
-import gedi.solutions.geode.security.User;
+import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
+import io.pivotal.gedi.geode.security.SecurityCryption;
+import io.pivotal.gedi.geode.security.User;
 import nyla.solutions.core.util.Cryption;
 
 

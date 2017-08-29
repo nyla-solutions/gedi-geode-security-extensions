@@ -1,4 +1,4 @@
-package gedi.solutions.geode.security.functions;
+package io.pivotal.gedi.geode.security.functions;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 
-import gedi.solutions.geode.security.User;
+import io.pivotal.gedi.geode.security.User;
 
 /**
  * Add a given user to the user regions

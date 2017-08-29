@@ -1,17 +1,22 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Region;
 
-
+/**
+ * Manages user access 
+ * @author Gregory Green
+ *
+ */
 public class UserRegionService implements UserService
 {
 	public UserRegionService(Region<String,User> region)
 	{
 		this.region = region;
 	}//------------------------------------------------
-	/* (non-Javadoc)
-	 * @see io.pivotal.gemfire.security.UserService#findUser(java.lang.String)
+	/**
+	 * @param id the user id to find
+	 * @return the user
 	 */
 	@Override
 	public User findUser(String id)

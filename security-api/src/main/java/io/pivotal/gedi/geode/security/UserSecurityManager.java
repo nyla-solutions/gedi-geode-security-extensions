@@ -1,4 +1,4 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -11,6 +11,7 @@ import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.SecurityManager;
 
 import nyla.solutions.core.util.Cryption;
+import nyla.solutions.core.util.Debugger;
 
 
 /**
@@ -41,7 +42,7 @@ public class UserSecurityManager implements SecurityManager
 			
 		String userName  = null;
 			userName = credentials.getProperty(USERNAME_PROP);	
-			if (userName == null){
+			if (userName == null || userName.length() == 0){
 				throw new AuthenticationFailedException(USERNAME_PROP+" required");
 			}
 			
@@ -54,23 +55,31 @@ public class UserSecurityManager implements SecurityManager
 			User user = this.userService.findUser(userName);
 			
 			if(user == null)
-				throw new AuthenticationFailedException("user or password not found");
+				throw new AuthenticationFailedException("user \""+userName+"\" not found");
 	
 			
 			Cryption cryption = SecurityCryption.getInstance();
 			
 			byte[] userEncryptedPasswordBytes = user.getEncryptedPassword();
 			
-			if(userEncryptedPasswordBytes == null)
-				throw new AuthenticationFailedException("user or password not found");
+			if(userEncryptedPasswordBytes == null || userEncryptedPasswordBytes.length == 0)
+				throw new AuthenticationFailedException("password is required");
 			
 			String userEncryptedPassword =  new String(userEncryptedPasswordBytes,StandardCharsets.UTF_8);
 			try
 			{
 				
-				//compare password
-				String storedUnEncrypted = cryption.decryptText(userEncryptedPassword);
+				String storedUnEncrypted = null;
 				
+				try
+				{
+					//compare password
+					storedUnEncrypted = cryption.decryptText(userEncryptedPassword);
+				}
+				catch (NumberFormatException e)
+				{
+					throw new AuthenticationFailedException("Stored password Invalid p:"+userEncryptedPassword+" STACK:"+Debugger.stackTrace(e));
+				}
 				
 				//test without encrypt
 				if(storedUnEncrypted.equals(password))
@@ -80,17 +89,20 @@ public class UserSecurityManager implements SecurityManager
 				if(indexOfCryption > -1)
 					password = password.substring(indexOfCryption+Cryption.CRYPTION_PREFIX.length());
 				
-				String unencryptedPassword = cryption.decryptText(password);
-				
-				
+				String unencryptedPassword = null;
+				try
+				{
+					unencryptedPassword = cryption.decryptText(password);
+				}
+				catch(NumberFormatException e)
+				{
+					unencryptedPassword = password;
+				}
 				
 				if(!unencryptedPassword.equals(storedUnEncrypted))
-					throw new AuthenticationFailedException("user or password not found");
+					throw new AuthenticationFailedException("Password user or password not found");
 			}
-			catch (NumberFormatException e)
-			{
-				throw new AuthenticationFailedException("password or user not found");
-			}
+
 			catch (Exception e)
 			{
 				throw new AuthenticationFailedException(e.getMessage(),e);

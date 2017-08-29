@@ -1,13 +1,11 @@
-package gedi.solutions.geode.security.functions;
-
-import static org.junit.Assert.*;
+package io.pivotal.gedi.geode.security.functions;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 import org.junit.Test;
 
-import gedi.solutions.geode.security.User;
+import io.pivotal.gedi.geode.security.functions.AddUserFunction;
 
 import static org.mockito.Mockito.*;
 

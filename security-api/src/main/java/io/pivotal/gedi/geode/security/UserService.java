@@ -1,4 +1,4 @@
-package gedi.solutions.geode.security;
+package io.pivotal.gedi.geode.security;
 
 public interface UserService
 {
