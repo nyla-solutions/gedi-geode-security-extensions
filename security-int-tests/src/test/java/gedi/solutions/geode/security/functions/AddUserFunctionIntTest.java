@@ -37,6 +37,7 @@ public class AddUserFunctionIntTest
 		geode = GeodeClient.connect();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testExecute()
 	throws Exception
@@ -47,7 +48,7 @@ public class AddUserFunctionIntTest
 		
 		String [] args = {"appUser","password","ALL" };
 		JvmExecutionFactory factory = new JvmExecutionFactory();
-		Execution<?,?,?> exe = factory.onRegion(userRegion).withArgs(args);
+		Execution exe = factory.onRegion(userRegion).withArgs(args);
 		
 		Collection<String> userIds = GemFireIO.exeWithResults(exe, func);
 		

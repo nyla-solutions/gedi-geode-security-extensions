@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.nyla-solutions</groupId>
   <artifactId>gedi-geode-security-extensions-int-tests</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>gedi-geode-security-extensions-int-tests</name>
   	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>	
-	  	<gemfire.version>9.1.0</gemfire.version>	
+	  	<gemfire.version>9.0.2</gemfire.version>	
 	</properties>
   <repositories>
 		<repository>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>gedi-geode-security-extensions</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</dependency>		
         <dependency>
             <groupId>org.mockito</groupId>

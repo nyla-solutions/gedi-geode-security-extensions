@@ -41,12 +41,12 @@ Example
 
 The following is an example gfsh command to start the locator
  
-	start locator --name=locator  --J="-Dgemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL"  --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.1.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar --enable-cluster-configuration --locators=localhost[10334]
+	start locator --name=locator  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties"  --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.2.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar --enable-cluster-configuration --locators=localhost[10334]
 	
-	start server --name=server1 --locators=localhost[10334] --server-port=10201 --J="-Dgemfire.security-user=admin" --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin --password="{cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102" --J="-Dgemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.1.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar
+	start server --name=server1 --locators=localhost[10334] --server-port=10201 --J="-Dgemfire.security-user=admin" --use-cluster-configuration=true  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --user=admin --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.2.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar
 	
 	
-	start server --name=server2 --locators=localhost[10334] --server-port=10202 --J="-Dgemfire.security-user=admin" --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin --password="{cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102" --J="-Dgemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.1.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar
+	start server --name=server2 --locators=localhost[10334] --server-port=10202 --J="-Dgemfire.security-user=admin"  --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin  --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.2.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar
 	
 
 # User Security Manager
@@ -55,7 +55,22 @@ Set the GemFire security property **security-manager**=*io.pivotal.gedi.geode.se
 		
 ## Configured Users
 
-Add the following GemFire security property
+
+You can pass a **config.properties** JVM property to set a file that contains the security users passwords/privileges.
+
+The following is the example JVM set using gfsh --J option.
+
+	--J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties"
+
+The following is an example file content
+
+	# First user
+	gemfire.security-users.<userName1>=userEncryptedPassword,[privilege] [,privilege]* 
+	
+	# Second user
+	gemfire.security-users.<userName2>=userEncryptedPassword,[privilege] [,privilege]* 
+
+You can also add the following GemFire security property to configure users thru system properties
 
 	-Dgemfire.security-users.<userName1>=userEncryptedPassword,[privilege] [,privilege]* 
 	
@@ -86,11 +101,21 @@ The User privilege are based on the GemFire ResourePermission (Resource:Operatio
 
 Use the following sample command to encrypt a password. NOTE: SECURITY_ENCRYPTION_KEY variable must match the value set on the server.
 
-	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.1.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar io.pivotal.gedi.geode.security.SecurityCryption <PASSWORD>
-	
-	
+	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.2.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar io.pivotal.gedi.geode.security.SecurityCryption <PASSWORD>
 
-#GemFire Client Connections
+
+**Start Cache Server --password encryption**
+
+When starting a cache server the --user=... and ---password=... must be provided to authenticate to the locator. The password can be provided in encrypted or un-encrypted. 
+
+*Note it is recommended to encrypt all passwords*.
+
+**User passwords encryption** 
+
+All user passwords in a property file or passed in as system properties must be encrypted.
+		
+
+# GemFire Client Connections
 
 GemFire clients will provide an implementation of org.apache.geode.security.AuthInitialize.
 The security-username and security-password must initialized as gemfire properties.
@@ -99,5 +124,7 @@ See the following link for details:
 
 [https://gemfire.docs.pivotal.io/geode/managing/security/implementing_authentication.html](https://gemfire.docs.pivotal.io/geode/managing/security/implementing_authentication.html)
 
+
+Note that the security-password can be encrypted or un-encrypted.
 	
 	

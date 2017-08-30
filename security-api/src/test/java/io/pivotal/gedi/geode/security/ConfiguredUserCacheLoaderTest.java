@@ -1,6 +1,8 @@
 package io.pivotal.gedi.geode.security;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
 import io.pivotal.gedi.geode.security.SecurityCryption;
 import io.pivotal.gedi.geode.security.User;
 import nyla.solutions.core.util.Cryption;
+import nyla.solutions.core.util.settings.Settings;
 
 
 public class ConfiguredUserCacheLoaderTest
@@ -21,7 +24,11 @@ public class ConfiguredUserCacheLoaderTest
 	throws Exception
 	{
 		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
+		Settings settings = mock(Settings.class);
+		
 		Properties properties = new Properties();
+		
+		when(settings.getProperties()).thenReturn(properties);
 		
 		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
 		
@@ -29,7 +36,7 @@ public class ConfiguredUserCacheLoaderTest
 		
 		properties.setProperty("security-users.nyla", nylaProperty);
 		
-		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(properties);
+		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(settings);
 		
 		assertNotNull(cacheLoader);
 		User user = cacheLoader.findUser("invalid");
@@ -55,7 +62,12 @@ public class ConfiguredUserCacheLoaderTest
 	throws Exception
 	{
 		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
+		
+		Settings settings = mock(Settings.class);
+		
 		Properties properties = new Properties();
+
+		when(settings.getProperties()).thenReturn(properties);
 		
 		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
 		
@@ -63,7 +75,7 @@ public class ConfiguredUserCacheLoaderTest
 		
 		properties.setProperty("security-users.nyla", nylaProperty);
 		
-		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(properties);
+		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(settings);
 		
 		assertNotNull(cacheLoader);
 		User user = cacheLoader.findUser("invalid");
@@ -88,7 +100,12 @@ public class ConfiguredUserCacheLoaderTest
 	throws Exception
 	{
 		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
+		
+		Settings settings = mock(Settings.class);
+		
 		Properties properties = new Properties();
+
+		when(settings.getProperties()).thenReturn(properties);
 		
 		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
 		
@@ -96,7 +113,7 @@ public class ConfiguredUserCacheLoaderTest
 		
 		properties.setProperty("gemfire.security-users.nyla", nylaProperty);
 		
-		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(properties);
+		ConfiguredUserCacheLoader cacheLoader = new ConfiguredUserCacheLoader(settings);
 		
 		assertNotNull(cacheLoader);
 		User user = cacheLoader.findUser("invalid");

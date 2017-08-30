@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.nyla-solutions</groupId>
   <artifactId>gedi-geode-security-extensions</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>gedi-geode-security-extensions</name>
   	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

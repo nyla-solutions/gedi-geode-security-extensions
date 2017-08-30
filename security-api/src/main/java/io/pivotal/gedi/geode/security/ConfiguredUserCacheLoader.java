@@ -4,14 +4,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import org.apache.geode.cache.CacheLoader;
 import org.apache.geode.cache.CacheLoaderException;
 
 import org.apache.geode.cache.LoaderHelper;
 
 import nyla.solutions.core.exception.SetupException;
+import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Cryption;
+import nyla.solutions.core.util.settings.Settings;
 
 /**
  * <pre>
@@ -46,20 +47,20 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 	 */
 	public ConfiguredUserCacheLoader()
 	{
-		this(System.getProperties());
+		this(Config.getSettings());
 	}// --------------------------------------------------------
 	
 	/**
 	 *
 	 *@param properties the security properties
 	 */
-	public ConfiguredUserCacheLoader(Properties properties)
+	public ConfiguredUserCacheLoader(Settings properties)
 	{
 		
 		
 		this.declaredUsersMap = new HashMap<String,User>();
 		
-		properties.entrySet().stream().filter((e)->e.getKey().toString().contains(SECURITY_USERS_PROP))
+		properties.getProperties().entrySet().stream().filter((e)->e.getKey().toString().contains(SECURITY_USERS_PROP))
 		.map((e) -> createUserFromEntry(e)).forEach( u -> declaredUsersMap.put(u.getUserName(),u));
 		
 		
