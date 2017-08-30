@@ -71,6 +71,12 @@ The following is an example file content
 	# Second user
 	gemfire.security-users.<userName2>=userEncryptedPassword,[privilege] [,privilege]* 
 
+
+The following is an example default setting for an **admin** user with the **ALL** privilege and password:admin with in encrypted format when  `SECURITY_ENCRYPTION_KEY=PIVOTAL`
+
+	gemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL
+
+
 You can also add the following GemFire security property to configure users thru system properties
 
 	-Dgemfire.security-users.<userName1>=userEncryptedPassword,[privilege] [,privilege]* 
