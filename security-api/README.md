@@ -58,7 +58,8 @@ Set the GemFire security property **security-manager**=*io.pivotal.gedi.geode.se
 
 You can pass a **config.properties** JVM property to set a file that contains the security users passwords/privileges.
 
-The following is the example JVM set using gfsh --J option.
+The following is an example to set this JVM property using gfsh --J option.
+
 
 	--J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties"
 
