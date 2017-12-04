@@ -4,11 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.apache.geode.LogWriter;
-import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.SecurityManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import nyla.solutions.core.util.Cryption;
 import nyla.solutions.core.util.Debugger;
@@ -135,23 +135,23 @@ public class UserSecurityManager implements SecurityManager
     	
     	if(!hasPermission)
     	{
-        	getLogger().warning("user:"+user.getUserName()+" DOES NOT HAVE permission:"+textPermission);
+        	getLogger().warn("user:"+user.getUserName()+" DOES NOT HAVE permission:"+textPermission);
     	}
     	
     	return hasPermission;
     }//------------------------------------------------
-    private LogWriter getLogger()
+    private Logger getLogger()
     {
     	if(logWriter == null)
-    		logWriter = CacheFactory.getAnyInstance().getSecurityLogger();
+    		logWriter = LogManager.getLogger(UserSecurityManager.class);
     	
     	return logWriter;
     }//------------------------------------------------
-    protected void setLogger(LogWriter logger)
+    protected void setLogger(Logger logger)
     {
     	this.logWriter = logger;
     }//------------------------------------------------
-    private LogWriter logWriter = null;
+    private Logger logWriter = null;
     private final UserService userService;
 
 }

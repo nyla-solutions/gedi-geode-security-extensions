@@ -6,13 +6,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Properties;
-
-import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Region;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
@@ -44,7 +43,7 @@ public class UserSecurityManagerTest
 		UserService userService = new ConfiguredUserCacheLoader();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
-		LogWriter logWriter = mock(LogWriter.class);
+		Logger logWriter = mock(Logger.class);
 		
 		mgr.setLogger(logWriter);
 		
@@ -105,8 +104,8 @@ public class UserSecurityManagerTest
 		UserService userService = new ConfiguredUserCacheLoader();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
-		LogWriter logWriter = mock(LogWriter.class);
-		mgr.setLogger(logWriter);
+		Logger logger = mock(Logger.class);
+		mgr.setLogger(logger);
 		
 
 		ResourcePermission dataManager = new ResourcePermission(Resource.DATA,Operation.MANAGE);

@@ -118,9 +118,9 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 		return user;
 	}//------------------------------------------------
 	/**
+	 * @param  userName the user name
 	 * @return the user with a declared user name
 	 */
-	
 	public User findUser(String userName)
 	{
 		if(declaredUsersMap == null)
@@ -130,4 +130,5 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 	}// --------------------------------------------------------
 
 	private Map<String, User> declaredUsersMap = null;
+	//private final UserRegionService userRegionService;
 }
