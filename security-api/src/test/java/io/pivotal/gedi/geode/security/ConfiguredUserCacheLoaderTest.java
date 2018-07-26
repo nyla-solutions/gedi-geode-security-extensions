@@ -10,7 +10,6 @@ import java.util.Properties;
 import org.junit.Test;
 
 import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
-import io.pivotal.gedi.geode.security.SecurityCryption;
 import io.pivotal.gedi.geode.security.User;
 import nyla.solutions.core.util.Cryption;
 import nyla.solutions.core.util.settings.Settings;
@@ -23,14 +22,13 @@ public class ConfiguredUserCacheLoaderTest
 	public void testCreate_HasUsers()
 	throws Exception
 	{
-		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
 		Settings settings = mock(Settings.class);
 		
 		Properties properties = new Properties();
 		
 		when(settings.getProperties()).thenReturn(properties);
 		
-		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
+		String encryptedPassword = new Cryption().encryptText("password");
 		
 		String nylaProperty = Cryption.CRYPTION_PREFIX+encryptedPassword+",admin,read, write ";
 		
@@ -60,16 +58,14 @@ public class ConfiguredUserCacheLoaderTest
 	@Test
 	public void testCreate_UnEncryptedPAsswodHasUsers()
 	throws Exception
-	{
-		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
-		
+	{		
 		Settings settings = mock(Settings.class);
 		
 		Properties properties = new Properties();
 
 		when(settings.getProperties()).thenReturn(properties);
 		
-		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
+		String encryptedPassword = new Cryption().encryptText("password");
 		
 		String nylaProperty = Cryption.CRYPTION_PREFIX+encryptedPassword+",admin,read, write ";
 		
@@ -98,16 +94,14 @@ public class ConfiguredUserCacheLoaderTest
 	@Test
 	public void testGemFirePropertiesCreate_HasUsers()
 	throws Exception
-	{
-		System.setProperty(SecurityCryption.SECURITY_ENCRYPTION_KEY_PROP, "03232");
-		
+	{		
 		Settings settings = mock(Settings.class);
 		
 		Properties properties = new Properties();
 
 		when(settings.getProperties()).thenReturn(properties);
 		
-		String encryptedPassword = SecurityCryption.getInstance().encryptText("password");
+		String encryptedPassword = new Cryption().encryptText("password");
 		
 		String nylaProperty = Cryption.CRYPTION_PREFIX+encryptedPassword+",admin,read, write ";
 		

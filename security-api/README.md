@@ -25,17 +25,17 @@ are available on the [maven website](http://maven.apache.org/download.cgi). Afte
 follow these instructions to build all of the java artifacts.
 
 
-## Setting `SECURITY_ENCRYPTION_KEY` configuration
+## Setting `CRYPTION_KEY` configuration
 
 The encryption and decryption of user password is based on a encryption key.
 
-You must set the SECURITY_ENCRYPTION_KEY environment variable or as a JVM system property on each started Geode member (locators and cache server).
+You must set the CRYPTION_KEY environment variable or as a JVM system property on each started Geode member (locators and cache server).
    
-	export SECURITY_ENCRYPTION_KEY=<MY.ENCRYPTION.KEY.HERE>
+	export CRYPTION_KEY=<MY.ENCRYPTION.KEY.HERE>
 	
 Example
 
-	export SECURITY_ENCRYPTION_KEY=PIVOTAL
+	export CRYPTION_KEY=PIVOTAL
    
 ## Starting the Locator
 
@@ -72,7 +72,7 @@ The following is an example file content
 	gemfire.security-users.<userName2>=userEncryptedPassword,[privilege] [,privilege]* 
 
 
-The following is an example default setting for an **admin** user with the **ALL** privilege and password:admin with in encrypted format when  `SECURITY_ENCRYPTION_KEY=PIVOTAL`
+The following is an example default setting for an **admin** user with the **ALL** privilege and password:admin with in encrypted format when  `CRYPTION_KEY=PIVOTAL`
 
 	gemfire.security-users.admin={cryption}114 119 103 -118 -77 -24 43 -30 -34 112 -109 -100 90 25 -41 -102,ALL
 
@@ -106,7 +106,7 @@ The User privilege are based on the GemFire ResourePermission (Resource:Operatio
 
 ## Encryption Password
 
-Use the following sample command to encrypt a password. NOTE: SECURITY_ENCRYPTION_KEY variable must match the value set on the server.
+Use the following sample command to encrypt a password. NOTE: CRYPTION_KEY variable must match the value set on the server.
 
 	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.0.3.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.0.2.jar io.pivotal.gedi.geode.security.SecurityCryption <PASSWORD>
 

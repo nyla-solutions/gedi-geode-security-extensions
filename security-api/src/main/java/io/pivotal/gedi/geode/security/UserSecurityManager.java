@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Properties;
 
+import javax.transaction.SystemException;
+
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.SecurityManager;
@@ -20,9 +22,6 @@ import nyla.solutions.core.util.Debugger;
  */
 public class UserSecurityManager implements SecurityManager
 {
-	
-	public static final String USERNAME_PROP = "security-username";
-	public static final String PASSWORD_PROP = "security-password";
 	
 	public UserSecurityManager()
 	{
@@ -41,16 +40,17 @@ public class UserSecurityManager implements SecurityManager
 			throw new AuthenticationFailedException("null properties, properties required");
 			
 		String userName  = null;
-			userName = credentials.getProperty(USERNAME_PROP);	
+			userName = credentials.getProperty(SecurityConstants.USERNAME_PROP);	
 			if (userName == null || userName.length() == 0){
-				throw new AuthenticationFailedException(USERNAME_PROP+" required");
+				throw new AuthenticationFailedException(SecurityConstants.USERNAME_PROP+" required");
 			}
 			
-			String password = credentials.getProperty(PASSWORD_PROP);
-			
+			String password = credentials.getProperty(SecurityConstants.PASSWORD_PROP);
 			
 			if (password == null)
-				throw new AuthenticationFailedException(PASSWORD_PROP+" required");
+				throw new AuthenticationFailedException(SecurityConstants.PASSWORD_PROP+" required");
+			
+			password = password.trim();
 			
 			User user = this.userService.findUser(userName);
 			
@@ -58,57 +58,57 @@ public class UserSecurityManager implements SecurityManager
 				throw new AuthenticationFailedException("user \""+userName+"\" not found");
 	
 			
-			Cryption cryption = SecurityCryption.getInstance();
-			
 			byte[] userEncryptedPasswordBytes = user.getEncryptedPassword();
 			
 			if(userEncryptedPasswordBytes == null || userEncryptedPasswordBytes.length == 0)
 				throw new AuthenticationFailedException("password is required");
 			
+			Cryption cryption = new Cryption();
 			String userEncryptedPassword =  new String(userEncryptedPasswordBytes,StandardCharsets.UTF_8);
 			try
 			{
 				
 				String storedUnEncrypted = null;
 				
-				try
-				{
-					//compare password
-					storedUnEncrypted = cryption.decryptText(userEncryptedPassword);
-				}
-				catch (NumberFormatException e)
-				{
-					throw new AuthenticationFailedException("Stored password Invalid p:"+userEncryptedPassword+" STACK:"+Debugger.stackTrace(e));
-				}
+				//compare password
+				storedUnEncrypted = cryption.decryptText(userEncryptedPassword);
+				
 				
 				//test without encrypt
 				if(storedUnEncrypted.equals(password))
 					return user;
+					
+				String unencryptedPassword = Cryption.interpret(password);
 				
-				int indexOfCryption = password.indexOf(Cryption.CRYPTION_PREFIX);
-				if(indexOfCryption > -1)
-					password = password.substring(indexOfCryption+Cryption.CRYPTION_PREFIX.length());
+				if(unencryptedPassword.equals(storedUnEncrypted))
+					return user;
 				
-				String unencryptedPassword = null;
 				try
 				{
-					unencryptedPassword = cryption.decryptText(password);
+						unencryptedPassword = cryption.decryptText(unencryptedPassword);
 				}
-				catch(NumberFormatException e)
+				catch(IllegalArgumentException e)
 				{
-					unencryptedPassword = password;
 				}
 				
-				if(!unencryptedPassword.equals(storedUnEncrypted))
-					throw new AuthenticationFailedException("Password user or password not found");
+				if(unencryptedPassword.equals(storedUnEncrypted))
+					return user;
+				
+				throw new AuthenticationFailedException("Password user or password not found");
 			}
-
+			catch(AuthenticationFailedException e)
+			{
+				throw e;
+			}
+			catch (SystemException e)
+			{
+				throw new AuthenticationFailedException(e.getMessage(),e);
+			}
 			catch (Exception e)
 			{
 				throw new AuthenticationFailedException(e.getMessage(),e);
 			}
 			
-			return user;
 			
 	}//------------------------------------------------
     public boolean authorize(Object principal, ResourcePermission permission)

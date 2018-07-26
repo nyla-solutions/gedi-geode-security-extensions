@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
-import io.pivotal.gedi.geode.security.SecurityCryption;
 import io.pivotal.gedi.geode.security.User;
 import io.pivotal.gedi.geode.security.UserRegionService;
 import io.pivotal.gedi.geode.security.UserSecurityManager;
@@ -30,13 +29,12 @@ public class UserSecurityManagerTest
 	public void test_CanAuthorizeCluster()
 	throws Exception
 	{
-		System.setProperty("SECURITY_ENCRYPTION_KEY","0123456789012345");
 		User user = new User();
 		user.setUserName("testUser");
-		user.setEncryptedPassword(SecurityCryption.getInstance().encryptText("admin").getBytes(StandardCharsets.UTF_8));
+		user.setEncryptedPassword(new Cryption().encryptText("admin").getBytes(StandardCharsets.UTF_8));
 		user.setPriviledges(Collections.singleton("ALL"));
 		
-		String password = SecurityCryption.getInstance().encryptText("password");
+		String password = new Cryption().encryptText("password");
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
@@ -91,13 +89,12 @@ public class UserSecurityManagerTest
 	public void test_CanAuthorizeData()
 	throws Exception
 	{
-		System.setProperty("SECURITY_ENCRYPTION_KEY","0123456789012345");
 		User user = new User();
 		user.setUserName("testUser");
-		user.setEncryptedPassword(SecurityCryption.getInstance().encryptText("admin").getBytes(StandardCharsets.UTF_8));
+		user.setEncryptedPassword(new Cryption().encryptText("admin").getBytes(StandardCharsets.UTF_8));
 		user.setPriviledges(Collections.singleton("ALL"));
 		
-		String password = SecurityCryption.getInstance().encryptText("password");
+		String password = new Cryption().encryptText("password");
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
@@ -139,12 +136,10 @@ public class UserSecurityManagerTest
 	@Test
 	public void test_UserCanAuthenticate()
 	throws Exception
-	{
-		System.setProperty("SECURITY_ENCRYPTION_KEY","0123456789012345");
-		
+	{		
 		User user = new User();
 		user.setUserName("admin");
-		user.setEncryptedPassword(SecurityCryption.getInstance().encryptText("admin").getBytes(StandardCharsets.UTF_8));
+		user.setEncryptedPassword(new Cryption().encryptText("admin").getBytes(StandardCharsets.UTF_8));
 		
 		Region<String, User> region = mock(Region.class);
 		when(region.get("admin")).thenReturn(user);
@@ -197,7 +192,7 @@ public class UserSecurityManagerTest
 			
 			
 			
-			credentails.setProperty("security-password", SecurityCryption.getInstance().encryptText("invalid"));
+			credentails.setProperty("security-password", new Cryption().encryptText("invalid"));
 			
 			try
 			{ 
@@ -208,22 +203,42 @@ public class UserSecurityManagerTest
 			{
 			}
 			
-			credentails.setProperty("security-password", SecurityCryption.getInstance().encryptText("admin"));
+			credentails.setProperty("security-password", new Cryption().encryptText("admin"));
 			
 			Object principal = mgr.authenticate(credentails);
 			
 			assertNotNull(principal);
 			
 			
-			credentails.setProperty("security-password", Cryption.CRYPTION_PREFIX+SecurityCryption.getInstance().encryptText("admin"));
+			credentails.setProperty("security-password", Cryption.CRYPTION_PREFIX+new Cryption().encryptText("admin"));
 			
 			principal = mgr.authenticate(credentails);
 			
 			assertNotNull(principal);
 			
-			credentails.setProperty("security-password", " "+Cryption.CRYPTION_PREFIX+SecurityCryption.getInstance().encryptText("admin"));
+			credentails.setProperty("security-password", " "+Cryption.CRYPTION_PREFIX+new Cryption().encryptText("admin"));
 			
 			principal = mgr.authenticate(credentails);
+			
+			assertNotNull(principal);
+			
+			//test with auth init
+			credentails.setProperty("security-username","admin");
+			credentails.setProperty("security-password","admin");
+			ConfigAuthInitialize auth = new ConfigAuthInitialize();
+			Properties authInit = auth.getCredentials(credentails);
+			
+			principal = mgr.authenticate(authInit);
+			
+			assertNotNull(principal);
+		
+			//test with auth init encrypted
+			credentails.setProperty("security-username","admin");
+			credentails.setProperty("security-password","{cryption}cndnirPoK+LecJOcWhnXmg==");
+			
+			authInit = auth.getCredentials(credentails);
+			
+			principal = mgr.authenticate(authInit);
 			
 			assertNotNull(principal);
 			
