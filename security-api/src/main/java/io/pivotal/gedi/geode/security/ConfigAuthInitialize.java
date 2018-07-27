@@ -7,7 +7,6 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.AuthenticationFailedException;
 
-import nyla.solutions.core.security.SecuredToken;
 import nyla.solutions.core.util.Config;
 
 /**

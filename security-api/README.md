@@ -133,5 +133,17 @@ See the following link for details:
 
 
 Note that the security-password can be encrypted or un-encrypted.
-	
+
+
+# LDAP Security Manager
+
+See [LDAP Security manager](README_LDAP_SecurityMgr.md)
+
+ 
+## GemFire Commercial Repository
+
+
+See the following for instruction to down the GemFire artifacts.
+
+	https://gemfire.docs.pivotal.io/gemfire/getting_started/installation/obtain_gemfire_maven.html
 	
