@@ -9,7 +9,7 @@ import nyla.solutions.core.security.data.SecurityPermissionContains;
 
 public class LdapAclBuilder extends SecurityAclBuilder
 {
-private SecurityAcl acl = new SecurityAcl();
+	private SecurityAcl acl = new SecurityAcl();
 	
 	public void buildGroupPermission(String group, String permission)
 	{

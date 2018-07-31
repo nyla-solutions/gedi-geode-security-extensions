@@ -56,13 +56,13 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 		{
 			if (principal == null)
 			{
-				securityLogger.info("Not authorized SecurityManager principal is null for context" + context);
+				securityLogger.warn("Not authorized SecurityManager principal is null for context" + context);
 				return false;
 			}
 
 			if (context == null)
 			{
-				securityLogger.info("Not authorized SecurityManager context is null for principal" + principal);
+				securityLogger.warn("Not authorized SecurityManager context is null for principal" + principal);
 				return true;
 			}
 

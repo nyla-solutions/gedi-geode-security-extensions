@@ -57,16 +57,19 @@ public class AclSecurityPropertiesDirector implements BuilderDirector<SecurityAc
 
 	public void construct(SecurityAclBuilder builder)
 	{
+		String envUserPrefix = Config.sanitizeEnvVarNAme(user_prefix);
+		String envGroupPrefix = Config.sanitizeEnvVarNAme(group_prefix);
+		
 		securityProps.forEach(
 		(k, v) ->
 		{
 			String keyText = k.toString();
-			if (keyText.startsWith(group_prefix))
+			if (keyText.startsWith(group_prefix) || keyText.startsWith(envGroupPrefix))
 			{
 				String group = keyText.substring(group_prefix.length());
 				builder.buildGroupPermission(group, v.toString());
 			}
-			else if (keyText.startsWith(user_prefix))
+			else if (keyText.startsWith(user_prefix) || keyText.startsWith(envUserPrefix))
 			{
 				String user = keyText.substring(user_prefix.length());
 				builder.buildUserPermission(user, v.toString());
@@ -74,8 +77,7 @@ public class AclSecurityPropertiesDirector implements BuilderDirector<SecurityAc
 		});
 		
 		
-		String envUserPrefix = Config.sanitizeEnvVarNAme(user_prefix);
-		String envGroupPrefix = Config.sanitizeEnvVarNAme(group_prefix);
+	
 		
 		Map<Object,Object> properties = Config.getProperties();
 		
@@ -85,12 +87,13 @@ public class AclSecurityPropertiesDirector implements BuilderDirector<SecurityAc
 		properties.forEach((k, v) ->
 		{
 			String keyText = k.toString();
-			if (keyText.startsWith(envGroupPrefix))
+			
+			if (keyText.startsWith(envGroupPrefix) || keyText.startsWith(group_prefix))
 			{
 				String group = keyText.substring(envGroupPrefix.length());
 				builder.buildGroupPermission(group, v.toString());
 			}
-			else if (keyText.startsWith(envUserPrefix))
+			else if (keyText.startsWith(envUserPrefix)|| keyText.startsWith(user_prefix))
 			{
 				String user = keyText.substring(envUserPrefix.length());
 				builder.buildUserPermission(user, v.toString());

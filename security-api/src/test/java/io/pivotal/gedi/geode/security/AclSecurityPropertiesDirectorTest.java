@@ -2,23 +2,29 @@ package io.pivotal.gedi.geode.security;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Test;
 
+import io.pivotal.gedi.geode.security.ldap.LdapSecurityConstants;
 import nyla.solutions.core.util.Config;
 
 public class AclSecurityPropertiesDirectorTest
 {
 
-	static boolean builtUser= false;
-	static boolean builtGroups= false;
+	static Map<String,String> builtUsersMap = new HashMap<String,String>();
+	static Map<String,String> builtGroupMap = new HashMap<String,String>();
 	
 	@Test
 	public void testConstruct()
 	{
-		String group_prefix = "security-groups";
-		String user_prefix = "security-users-";
+		System.setProperty("config.properties", "src/test/resources/config.properties");
+		Config.reLoad();
+		
+		String group_prefix =LdapSecurityConstants.LDAP_ACL_GROUP_PREFIX;
+		String user_prefix = LdapSecurityConstants.LDAP_ACL_USER_PREFIX;
 		Properties props = new Properties();
 		
 		String systemUserPropertName = Config.sanitizeEnvVarNAme(user_prefix)+"JUNIT";
@@ -35,24 +41,30 @@ public class AclSecurityPropertiesDirectorTest
 			@Override
 			public void buildUserPermission(String user, String permission)
 			{
-				builtUser = true; 
+				System.out.println("user:"+user);
+				builtUsersMap.put(user,permission); 
 				
 			}
 			@Override
 			public void buildGroupPermission(String group, String permission)
 			{
-				builtGroups = true;
+				builtGroupMap.put(group,permission);
 			}
 		};
+		
+		
 		
 		AclSecurityPropertiesDirector d = new AclSecurityPropertiesDirector
 		(props, group_prefix, user_prefix);
 		
 		d.construct(builder);
 		
-		assertTrue(builtUser);
-		assertTrue(builtGroups);
+		assertTrue(!builtUsersMap.isEmpty());
+		assertTrue(!builtGroupMap.isEmpty());
 		
+		assertTrue(builtUsersMap.containsKey("cluster"));
+		assertTrue(builtUsersMap.containsKey("readonly"));
+		assertTrue(builtGroupMap.containsKey("reporters"));
 	}
 	
 	
