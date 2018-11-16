@@ -23,6 +23,7 @@ import nyla.solutions.core.util.Config;
  * @author Gregory Green
  *
  */
+@SuppressWarnings("deprecation")
 public class ConfigAuthInitialize
 implements AuthInitialize
 {

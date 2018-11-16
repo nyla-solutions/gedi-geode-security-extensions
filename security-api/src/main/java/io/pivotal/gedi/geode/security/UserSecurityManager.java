@@ -24,7 +24,7 @@ public class UserSecurityManager implements SecurityManager
 	
 	public UserSecurityManager()
 	{
-		this(new ConfiguredUserCacheLoader());
+		this(new SettingsUserService());
 	}
 	
 	public UserSecurityManager(UserService userService)

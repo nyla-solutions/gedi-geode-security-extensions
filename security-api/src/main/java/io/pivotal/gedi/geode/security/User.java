@@ -11,7 +11,6 @@ import org.apache.geode.pdx.PdxWriter;
 
 public class User implements PdxSerializable, Serializable
 {
-	
 	/**
 	 * 
 	 */

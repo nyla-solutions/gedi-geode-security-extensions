@@ -10,21 +10,23 @@ import org.apache.geode.cache.CacheLoaderException;
 import org.apache.geode.cache.LoaderHelper;
 
 import nyla.solutions.core.exception.SetupException;
+import nyla.solutions.core.patterns.observer.SubjectObserver;
 import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Cryption;
 import nyla.solutions.core.util.settings.Settings;
 
 /**
  * <pre>
- * Set system propertu
+ * Set system property
  * 
- * gemfire.security-users.USERNAME=password [priviledge] [,priviledge]
+ * gemfire.security-users.USERNAME=password,[priviledge],[,priviledge]
  * </pre> 
  * @author Gregory Green
  *
  */
 
-public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  UserService
+public class SettingsUserService implements CacheLoader<String, User>,  UserService, 
+SubjectObserver<Settings>
 {	
 	/**
 	 * Property to support users being loaded from the security.properties file
@@ -32,6 +34,35 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 	public static final String SECURITY_USERS_PROP = "security-users.";
 	
 
+	/**
+	 * Factory method to create declare user loader from properties
+	 */
+	public SettingsUserService()
+	{
+		this(Config.getSettings());
+	}// --------------------------------------------------------
+	
+	/**
+	 *
+	 *@param properties the security properties
+	 */
+	public SettingsUserService(Settings properties)
+	{
+		loadUsersMap(properties);
+	}// --------------------------------------------------------
+
+	private void loadUsersMap(Settings settings)
+	{
+		if (settings == null)
+			throw new IllegalArgumentException("properties is required");
+		
+		this.declaredUsersMap = new HashMap<String,User>();
+		
+		settings.getProperties().entrySet().stream().filter((e)->e.getKey().toString().contains(SECURITY_USERS_PROP))
+		.map((e) -> createUserFromEntry(e)).forEach( u -> declaredUsersMap.put(u.getUserName(),u));
+		
+		settings.registerObserver(this);
+	}//------------------------------------------------
 	@Override
 	public void close()
 	{
@@ -42,29 +73,6 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 		return this.findUser(helper.getKey());
 	}// --------------------------------------------------------
 
-	/**
-	 * Factory method to create declare user loader from properties
-	 */
-	public ConfiguredUserCacheLoader()
-	{
-		this(Config.getSettings());
-	}// --------------------------------------------------------
-	
-	/**
-	 *
-	 *@param properties the security properties
-	 */
-	public ConfiguredUserCacheLoader(Settings properties)
-	{
-		
-		
-		this.declaredUsersMap = new HashMap<String,User>();
-		
-		properties.getProperties().entrySet().stream().filter((e)->e.getKey().toString().contains(SECURITY_USERS_PROP))
-		.map((e) -> createUserFromEntry(e)).forEach( u -> declaredUsersMap.put(u.getUserName(),u));
-		
-		
-	}// --------------------------------------------------------
 	/**
 	 * 
 	 * @param entry the property map entry
@@ -128,6 +136,12 @@ public class ConfiguredUserCacheLoader implements CacheLoader<String, User>,  Us
 		
 		return declaredUsersMap.get(userName);
 	}// --------------------------------------------------------
+	
+	@Override
+	public void update(String subjectName, Settings settings)
+	{
+		this.loadUsersMap(settings);
+	}//------------------------------------------------
 
 	private Map<String, User> declaredUsersMap = null;
 	//private final UserRegionService userRegionService;

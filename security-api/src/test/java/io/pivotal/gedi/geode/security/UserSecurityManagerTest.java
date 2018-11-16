@@ -14,7 +14,7 @@ import org.apache.geode.security.ResourcePermission.Resource;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
+import io.pivotal.gedi.geode.security.SettingsUserService;
 import io.pivotal.gedi.geode.security.User;
 import io.pivotal.gedi.geode.security.UserRegionService;
 import io.pivotal.gedi.geode.security.UserSecurityManager;
@@ -23,6 +23,7 @@ import nyla.solutions.core.util.Cryption;
 
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("deprecation")
 public class UserSecurityManagerTest
 {
 	@Test
@@ -38,7 +39,7 @@ public class UserSecurityManagerTest
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
-		UserService userService = new ConfiguredUserCacheLoader();
+		UserService userService = new SettingsUserService();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
 		Logger logWriter = mock(Logger.class);
@@ -98,7 +99,7 @@ public class UserSecurityManagerTest
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
-		UserService userService = new ConfiguredUserCacheLoader();
+		UserService userService = new SettingsUserService();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
 		Logger logger = mock(Logger.class);
@@ -132,7 +133,7 @@ public class UserSecurityManagerTest
 		assertTrue(mgr.authorize(user, clusterRead));
 	}//------------------------------------------------
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	@Test
 	public void test_UserCanAuthenticate()
 	throws Exception
