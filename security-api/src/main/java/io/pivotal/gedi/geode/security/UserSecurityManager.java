@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import nyla.solutions.core.util.Cryption;
+import nyla.solutions.core.util.Debugger;
 
 
 /**
@@ -39,33 +40,37 @@ public class UserSecurityManager implements SecurityManager
 			throw new AuthenticationFailedException("null properties, properties required");
 			
 		String userName  = null;
-			userName = credentials.getProperty(SecurityConstants.USERNAME_PROP);	
-			if (userName == null || userName.length() == 0){
+		
+		userName = credentials.getProperty(SecurityConstants.USERNAME_PROP);	
+		if (userName == null || userName.length() == 0){
 				throw new AuthenticationFailedException(SecurityConstants.USERNAME_PROP+" required");
-			}
+		}
+		
+		String password = credentials.getProperty(SecurityConstants.PASSWORD_PROP);
 			
-			String password = credentials.getProperty(SecurityConstants.PASSWORD_PROP);
-			
-			if (password == null)
+		if (password == null)
 				throw new AuthenticationFailedException(SecurityConstants.PASSWORD_PROP+" required");
 			
 			password = password.trim();
 			
-			User user = this.userService.findUser(userName);
-			
-			if(user == null)
-				throw new AuthenticationFailedException("user \""+userName+"\" not found");
-	
-			
-			byte[] userEncryptedPasswordBytes = user.getEncryptedPassword();
-			
-			if(userEncryptedPasswordBytes == null || userEncryptedPasswordBytes.length == 0)
-				throw new AuthenticationFailedException("password is required");
-			
-			Cryption cryption = new Cryption();
-			String userEncryptedPassword =  new String(userEncryptedPasswordBytes,StandardCharsets.UTF_8);
 			try
 			{
+
+				
+				User user = this.userService.findUser(userName);
+				
+				if(user == null)
+					throw new AuthenticationFailedException("user \""+userName+"\" not found");
+		
+				
+				byte[] userEncryptedPasswordBytes = user.getEncryptedPassword();
+				
+				if(userEncryptedPasswordBytes == null || userEncryptedPasswordBytes.length == 0)
+					throw new AuthenticationFailedException("password is required");
+				
+				Cryption cryption = new Cryption();
+				String userEncryptedPassword =  new String(userEncryptedPasswordBytes,StandardCharsets.UTF_8);
+			
 				
 				String storedUnEncrypted = null;
 				
@@ -99,13 +104,9 @@ public class UserSecurityManager implements SecurityManager
 			{
 				throw e;
 			}
-			catch (SystemException e)
-			{
-				throw new AuthenticationFailedException(e.getMessage(),e);
-			}
 			catch (Exception e)
 			{
-				throw new AuthenticationFailedException(e.getMessage(),e);
+				throw new AuthenticationFailedException(e.getMessage()+" STACK:"+Debugger.stackTrace(e));
 			}
 			
 			

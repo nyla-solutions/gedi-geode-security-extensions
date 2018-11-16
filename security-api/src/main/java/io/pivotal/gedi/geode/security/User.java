@@ -83,8 +83,7 @@ public class User implements PdxSerializable, Serializable
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("User [userName=").append(userName).append(", encryptedPassword=")
-		.append(Arrays.toString(encryptedPassword)).append(", priviledges=").append(priviledges).append("]");
+		builder.append("User [userName=").append(userName).append(", priviledges=").append(priviledges).append("]");
 		return builder.toString();
 	}
 	@Override
