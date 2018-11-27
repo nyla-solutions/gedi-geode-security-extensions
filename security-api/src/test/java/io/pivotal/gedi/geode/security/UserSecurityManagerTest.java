@@ -14,19 +14,15 @@ import org.apache.geode.security.ResourcePermission.Resource;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import io.pivotal.gedi.geode.security.SettingsUserService;
+import io.pivotal.gedi.geode.security.ConfiguredUserCacheLoader;
 import io.pivotal.gedi.geode.security.User;
 import io.pivotal.gedi.geode.security.UserRegionService;
 import io.pivotal.gedi.geode.security.UserSecurityManager;
 import io.pivotal.gedi.geode.security.UserService;
-import nyla.solutions.core.exception.SystemException;
-import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Cryption;
-import nyla.solutions.core.util.settings.ConfigSettings;
 
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("deprecation")
 public class UserSecurityManagerTest
 {
 	@Test
@@ -42,7 +38,7 @@ public class UserSecurityManagerTest
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
-		UserService userService = new SettingsUserService();
+		UserService userService = new ConfiguredUserCacheLoader();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
 		Logger logWriter = mock(Logger.class);
@@ -102,7 +98,7 @@ public class UserSecurityManagerTest
 
 		System.setProperty("gemfire.security-users.testUser", Cryption.CRYPTION_PREFIX+password+",ALL,[priviledge],[,priviledge]");
 		
-		UserService userService = new SettingsUserService();
+		UserService userService = new ConfiguredUserCacheLoader();
 		UserSecurityManager mgr = new UserSecurityManager(userService);
 		
 		Logger logger = mock(Logger.class);
@@ -136,7 +132,7 @@ public class UserSecurityManagerTest
 		assertTrue(mgr.authorize(user, clusterRead));
 	}//------------------------------------------------
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_UserCanAuthenticate()
 	throws Exception
@@ -263,60 +259,6 @@ public class UserSecurityManagerTest
 			principal = mgr.authenticate(credentails);
 			
 			assertNotNull(principal);
-	}//------------------------------------------------
-	@Test
-	public void test_do_not_include_encrypted_password() throws Exception
-	{
-		ConfigSettings settings = new ConfigSettings();
-		System.setProperty(Cryption.CRYPTION_KEY_PROP, "PIVOTAL");
-		System.setProperty(Config.SYS_PROPERTY, "src/test/resources/geode_users.properties");
-		UserSecurityManager mgr = new UserSecurityManager(new SettingsUserService(settings));
-		Properties props = new Properties();
-		props.setProperty(SecurityConstants.USERNAME_PROP, "admin");
-		props.setProperty(SecurityConstants.PASSWORD_PROP, "admin");
-		Object principal = mgr.authenticate(props);
-		
-		assertTrue(mgr.authorize(principal, new ResourcePermission("CLUSTER","WRITE")));
-		
-		assertTrue(!principal.toString().contains("encryptedPassword"));
 	}
-	
-	@Test
-	public void test_must_not_throw_nylaexceptions() throws Exception
-	{
-		SettingsUserService service = mock(SettingsUserService.class);
-		UserSecurityManager mgr = new UserSecurityManager(service);
-		validateException(mgr,null);
-		
-		when(service.findUser(anyString())).thenThrow(new SystemException());
-		
-		Properties props = new Properties();
-		validateException(mgr,props);
-		
-		props.setProperty(SecurityConstants.USERNAME_PROP, "nyla");
-		props.setProperty(SecurityConstants.PASSWORD_PROP, "nope");
-		validateException(mgr,props);
-		
-		
-		props.setProperty(SecurityConstants.USERNAME_PROP, "admin");
-		props.setProperty(SecurityConstants.PASSWORD_PROP, Cryption.CRYPTION_PREFIX+"invalid");
-		validateException(mgr,props);
-		
-	}//------------------------------------------------
-	
-	private void validateException(UserSecurityManager mgr, Properties prop)
-	{
-	    try
-		{	
-			mgr.authenticate(prop);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			assertFalse(e.getClass().getName().contains("nyla"));
-			if(e.getCause() != null)
-				assertFalse(e.getCause().getClass().getName().contains("nyla"));
-			
-		}
-	}//------------------------------------------------
+
 }

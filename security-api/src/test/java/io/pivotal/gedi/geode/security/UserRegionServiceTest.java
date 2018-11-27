@@ -12,11 +12,10 @@ import io.pivotal.gedi.geode.security.UserService;
 
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("deprecation")
 public class UserRegionServiceTest 
 {
 	@Before
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	public void init()
 	{
 		

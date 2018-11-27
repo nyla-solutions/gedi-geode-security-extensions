@@ -36,31 +36,17 @@ You must set the CRYPTION_KEY environment variable or as a JVM system property o
 Example
 
 	export CRYPTION_KEY=PIVOTAL
-  
-# UserSecurityManager file based
-
-The following explains how to deploy the file properties based user implementation of the
-security manager.
-
- 
+   
 ## Starting the Locator
 
 The following is an example gfsh command to start the locator
-
-
-The key is setting the gemfire property `security-manager=io.pivotal.gedi.geode.security.UserSecurityManager`. Note the jar nyla.solutions.core-VERSION.jar and `gedi-geode-security-extensions-VERSION.jar` jars must be added to the CLASSPATH.
  
-	start locator --name=locator  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties"  --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager --J=-Dgemfire.jmx-manager-start=true --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar --enable-cluster-configuration --locators=localhost[10334]  --connect=false
+	start locator --name=locator  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties"  --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager --J=-Dgemfire.jmx-manager-start=true --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.4.jar --enable-cluster-configuration --locators=localhost[10334]  --connect=false
 	
-The following is an example gfsh command to start two servers where the JARS and properties must be set similar to the locator.
-	
-	start server --name=server1 --locators=localhost[10334] --server-port=10201  --use-cluster-configuration=true  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --user=admin --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar
+	start server --name=server1 --locators=localhost[10334] --server-port=10201 --J="-Dgemfire.security-user=admin" --use-cluster-configuration=true  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --user=admin --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.4.jar
 	
 	
-	--J="-Dgemfire.security-user=admin"
-	
-	
-	start server --name=server2 --locators=localhost[10334] --server-port=10202 --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin  --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar
+	start server --name=server2 --locators=localhost[10334] --server-port=10202 --J="-Dgemfire.security-user=admin"  --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin  --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.4.jar
 	
 
 # User Security Manager
@@ -122,7 +108,7 @@ The User privilege are based on the GemFire ResourePermission (Resource:Operatio
 
 Use the following sample command to encrypt a password. NOTE: CRYPTION_KEY variable must match the value set on the server.
 
-	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar io.pivotal.gedi.geode.security.SecurityCryption PASSWORD
+	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.4.jar io.pivotal.gedi.geode.security.SecurityCryption <PASSWORD>
 
 
 **Start Cache Server --password encryption**
@@ -154,7 +140,7 @@ Note that the security-password can be encrypted or un-encrypted.
 See [LDAP Security manager](README_LDAP_SecurityMgr.md)
 
  
-# GemFire Commercial Repository
+## GemFire Commercial Repository
 
 
 See the following for instruction to down the GemFire artifacts.
