@@ -6,7 +6,7 @@
     <groupId>com.github.nyla-solutions</groupId>
     <artifactId>gedi-geode-security-extension-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.3</version>
+    <version>1.0.0</version>
     <name>gedi-geode-security-extensions-parent</name>
     <modules>
         <module>security-api</module>
