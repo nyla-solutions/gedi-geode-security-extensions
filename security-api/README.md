@@ -57,9 +57,6 @@ The following is an example gfsh command to start two servers where the JARS and
 	start server --name=server1 --locators=localhost[10334] --server-port=10201  --use-cluster-configuration=true  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --user=admin --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar
 	
 	
-	--J="-Dgemfire.security-user=admin"
-	
-	
 	start server --name=server2 --locators=localhost[10334] --server-port=10202 --use-cluster-configuration=true --J="-Dgemfire.security-password=admin" --user=admin  --password="admin"  --J="-Dconfig.properties=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/src/test/resources/geode_users.properties" --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.UserSecurityManager  --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-1.0.0.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.9.jar
 	
 
