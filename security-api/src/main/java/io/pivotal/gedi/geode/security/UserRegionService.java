@@ -8,6 +8,7 @@ import org.apache.geode.cache.Region;
  * @author Gregory Green
  *
  */
+@Deprecated
 public class UserRegionService implements UserService
 {
 	public UserRegionService(Region<String,User> region)

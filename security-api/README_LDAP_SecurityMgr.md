@@ -35,7 +35,7 @@ Also see the following the scripts build the docker image, start Apache DS and a
 
 1) Set the CRYPTION_KEY environment variable used for encrypting/decrypting passwords prior to starting the cluster
 	
-		export CRYPTION_KEY=GEDI-GEODI-CRYPTION-KEY
+		export CRYPTION_KEY=PIVOTAL
 		
 You should assert that the CRYPTION_KEY value is a minimum of 16 characters.
 
@@ -108,7 +108,7 @@ Usage java nyla.solutions.core.util.Cryption <pass>
 
 Example:
 
-	java -classpath lib/nyla.solutions.core-1.1.0.jar nyla.solutions.core.util.Cryption password
+	java -classpath /Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.8.jar nyla.solutions.core.util.Cryption password
 	{cryption}Hepk7h7LmK3WO+dQlGQB0A==
 
 The encrypted password is always prefixed with {cryption}. This prefixed should be included in the property passwords.
@@ -117,31 +117,39 @@ The encrypted password is always prefixed with {cryption}. This prefixed should 
 
 The following are example gfsh commands to start a single locator
 
-		start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-<VERSION>.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr 
-		
-		
-		Example
-
-	start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.1.3-SNAPSHOT.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr 
-
-
-		
+		start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.3.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.8.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.ldap.LdapSecurityMgr   --connect=false
+				
 	
 4) **Start Servers**
 
 The following are example gfsh commands to start two data node cache servers
 
-		start server --name=server1 --server-port=9001 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-<VERSION>.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar
+		start server --name=server1 --server-port=9001 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.3.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.8.jar
 		
-		start server --name=server2 --server-port=9002 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-<VERSION>.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar
+		start server --name=server2 --server-port=9002 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=io.pivotal.gedi.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode-security-extensions/security-api/target/gedi-geode-security-extensions-0.1.3.jar:/Projects/solutions/gedi/dev/gedi-geode-security-extensions/lib/nyla.solutions.core-1.1.8.jar
 	
-	
-	
-example
-
-	
-
-	start server --name=server1 --server-port=9001 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.1.3-SNAPSHOT.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar
 
 After startup, gfsh and pulse will require a username/password to connect.
+
+
+
+** LDAP SSL **
+
+
+When using  both LDAPS and enables  GemFire SSL components like JMX, you should set the LDAP_USE_SSL_CONFIG_FACTORY to true in the environment variables.
+
+EXAMPLE
+
+    export LDAP_USE_SSL_CONFIG_FACTORY=true
+
+
+You will also need to set the following in the setenv, based on a separate keystore
+to used for LDAP.
+
+    export LDAP_SSL-KEYSTORE=...
+    export LDAP-SSL-TRUSTSTORE=..
+    export LDAP-SSL-KEYSTORE-PASSWORD=..
+    export LDAP-SSL-TRUSTSTORE-PASSSWORD=..
+
+
   
