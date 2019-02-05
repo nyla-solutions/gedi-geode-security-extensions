@@ -4,8 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Properties;
 
-import javax.transaction.SystemException;
-
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.SecurityManager;
@@ -98,7 +96,7 @@ public class UserSecurityManager implements SecurityManager
 				if(unencryptedPassword.equals(storedUnEncrypted))
 					return user;
 				
-				throw new AuthenticationFailedException("Password user or password not found");
+				throw new AuthenticationFailedException("Security user or password not found");
 			}
 			catch(AuthenticationFailedException e)
 			{

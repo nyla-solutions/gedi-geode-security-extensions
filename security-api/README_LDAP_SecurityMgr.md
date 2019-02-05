@@ -86,7 +86,18 @@ The following is an example security property file content (ex: gfldapsecurity.p
 
 The Access Control List (ACL) permissions the property file are based on the GemFire ResourePermission (Resource:Operation). The format of the property are **security-ldap-acl-user-${UID}** or  **security-ldap-acl-group-${groupID}**.
 
-The following are example ACLs permissions
+The following is an example file content
+
+	# Users
+	security-ldap-acl-user.<userName1>=[privilege] [,privilege]* 
+	security-ldap-acl-user.<userName2>=[privilege] [,privilege]* 
+	
+	# Groups
+	security-ldap-acl-group-${groupID1}=[privilege] [,privilege]*
+	security-ldap-acl-group-${groupID2}=[privilege] [,privilege]*
+
+
+The following are example ACLs permissions privilege
 
 - ALL - admin level user access with no restrictions
 - CLUSTER - all cluster read, write and manage permissions
@@ -99,6 +110,13 @@ The following are example ACLs permissions
 - DATA:MANAGE - data managed permissions such as creating regions
 - READ - cluster or data read permissions
 - WRITE - cluster or data write permissions
+
+
+See the following are all supported permissions: 
+
+
+[https://gemfire.docs.pivotal.io/97/geode/managing/security/implementing_authorization.html](https://gemfire.docs.pivotal.io/97/geode/managing/security/implementing_authorization.html)
+
 
 *Password Encryption Support*
 
