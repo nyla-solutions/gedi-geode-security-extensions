@@ -61,9 +61,12 @@ public class LdapSecurityMgrTest
 		props.setProperty(LdapSecurityConstants.LDAP_MEMBEROF_ATTRIB_NM_PROP, "memberOf");
 		
 		props.setProperty("security-ldap-acl-user-admin", "ALL");
+		props.setProperty("security-ldap-acl-user-multi", "CLUSTER:READ,DATA:READ,DATA:WRITE");
 		props.setProperty("security-ldap-acl-user-guest", "NONE");
 		props.setProperty("security-ldap-acl-user-readonly", "DATA:READ");
 		props.setProperty("security-ldap-acl-group-readonly","DATA:READ");
+		props.setProperty("security-ldap-acl-group-multiGroup","CLUSTER:READ,DATA:READ,DATA:WRITE");
+		
 		
 		mgr.setup(props);
 		
@@ -314,5 +317,62 @@ public class LdapSecurityMgrTest
 		}
 		
 	}//------------------------------------------------
+	
+
+	@Test
+	public void test_MultiplePermissions() throws Exception
+	{
+		LdapSecurityMgr mgr = init();
+		
+		synchronized (ldapConnectionFactory)
+		{
+			
+			LdapSecurityUser user = new LdapSecurityUser("multi","uid=multi");
+			user.addGroup(new LdapSecurityGroup("myGroup", "uid=readonly"));
+			ResourcePermission permission1  = new ResourcePermission("DATA", "READ");
+			boolean bool = mgr.authorize(user, permission1);
+			assertTrue(bool);
+			
+			ResourcePermission permission2  = new ResourcePermission("CLUSTER", "READ");
+			 user = new LdapSecurityUser("multi","uid=multi");
+			  bool = mgr.authorize(user, permission2);
+			  assertTrue(bool);
+			  
+			  System.out.println(new ResourcePermission("DATA", "WRITE"));
+			  
+			  assertTrue(mgr.authorize(user, new ResourcePermission("DATA", "WRITE")));
+			  assertFalse(mgr.authorize(user, new ResourcePermission("CLUSTER", "MANAGE")));
+
+		}
+		
+	}
+	
+	@Test
+	public void test_MultipleGropuPermissions() throws Exception
+	{
+		LdapSecurityMgr mgr = init();
+		
+		synchronized (ldapConnectionFactory)
+		{
+			
+			LdapSecurityUser user = new LdapSecurityUser("multiGroupUser","uid=multi");
+			user.addGroup(new LdapSecurityGroup("multiGroup", "uid=readonly"));
+			ResourcePermission permission1  = new ResourcePermission("DATA", "READ");
+			boolean bool = mgr.authorize(user, permission1);
+			assertTrue(bool);
+			
+			ResourcePermission permission2  = new ResourcePermission("CLUSTER", "READ");
+			  bool = mgr.authorize(user, permission2);
+			  assertTrue(bool);
+			  
+			  System.out.println(new ResourcePermission("DATA", "WRITE"));
+			  
+			  assertTrue(mgr.authorize(user, new ResourcePermission("DATA", "WRITE")));
+			  assertFalse(mgr.authorize(user, new ResourcePermission("CLUSTER", "MANAGE")));
+
+		}
+		
+	}
 
 }
+	
