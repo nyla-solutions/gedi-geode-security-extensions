@@ -112,6 +112,10 @@ The following are example ACLs permissions privilege
 - WRITE - cluster or data write permissions
 
 
+In the following file content property example, the "cluster" LDAP user is given both CLUSTER:READ and CLUSTER:MANAGE permissions.
+
+	security-ldap-acl-user-cluster=CLUSTER:READ,CLUSTER:MANAGE
+
 See the following are all supported permissions: 
 
 
